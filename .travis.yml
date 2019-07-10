@@ -17,7 +17,7 @@ before_install:
 - sudo apt-get -qq update
 - >
     sudo apt-get install -y \
-        "rpm=4.12.*" "fakeroot=1.20.2-*" "jq=1.5+*" "python-setuptools=20.*" "debhelper=9.*"
+        "rpm=4.12.*" "fakeroot=1.20.2-*" "jq=1.5+*" "python-all" "python-setuptools=20.*" "debhelper=9.*"
 
 install:
 - virtualenv venv
