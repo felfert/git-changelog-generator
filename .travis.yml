@@ -23,12 +23,9 @@ before_install:
         "rpm=4.12.*" "fakeroot=1.20.2-*" "jq=1.5+*" "python-all=${PYMAJ}.*" "python-setuptools=20.*" "debhelper=9.*"
 
 install:
-- virtualenv venv
-- . venv/bin/activate
 - pip install -r requirements_setup.txt -r requirements_test.txt
 
 script:
-- . venv/bin/activate
 # Tag trumps the version; then missing, version from file is taken instead
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
 - python setup.py test build sdist bdist_wheel bdist
