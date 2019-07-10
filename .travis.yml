@@ -1,35 +1,33 @@
 ---
-language: bash
+language: python
 sudo: required
 dist: xenial
 
 matrix:
   include:
     - python: 2.7
-      env: PYTHON=2.7
+      env: PYMAJ=2
     - python: 3.4
-      env: PYTHON=3.4
+      env: PYMAJ=3
     - python: 3.5
-      env: PYTHON=3.5
+      env: PYMAJ=3
     - python: 3.6
-      env: PYTHON=3.6
+      env: PYMAJ=3
     - python: 3.7
-      env: PYTHON=3.7
+      env: PYMAJ=3
 
 before_install:
 - sudo apt-get -qq update
 - >
     sudo apt-get install -y \
-        "rpm=4.12.*" "fakeroot=1.20.2-*" "jq=1.5+*" "python-all=${PYTHON}.*" "python-setuptools=20.*" "debhelper=9.*"
+        "rpm=4.12.*" "fakeroot=1.20.2-*" "jq=1.5+*" "python-all=${PYMAJ}.*" "python-setuptools=20.*" "debhelper=9.*"
 
 install:
-- pyenv global ${PYTHON}
 - virtualenv venv
 - . venv/bin/activate
 - pip install -r requirements_setup.txt -r requirements_test.txt
 
 script:
-- pyenv global ${PYTHON}
 - . venv/bin/activate
 # Tag trumps the version; then missing, version from file is taken instead
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
