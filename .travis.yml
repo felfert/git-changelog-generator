@@ -21,6 +21,9 @@ script:
 - python setup.py --command-packages=stdeb.command sdist_dsc --with-python2=True --with-python3=True --no-python2-scripts=True bdist_deb
 - rpmbuild -ba gcg.spec  --define "_topdir ${PWD}/dist" --define "_sourcedir ${PWD}/dist" --define "version ${VERSION}"
 - rpm -qlpi --requires --verbose dist/RPMS/*/*.rpm dist/SRPMS/*.rpm
+- echo "=================== Files in deb_dist:"
+- ls -al deb_dist/
+- echo "==================="
 - for i in deb_dist/*.deb; do dpkg --info "$i" && dpkg -c "$i"; done
 
 before_deploy:
@@ -42,7 +45,7 @@ deploy:
   on:
     tags: false
     all_branches: true
-    repo: felfert/git-changelog-generator-test
+    repo: felfert/git-changelog-generator
 - provider: script
   skip_cleanup: true
   script: >
