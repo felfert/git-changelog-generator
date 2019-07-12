@@ -4,64 +4,42 @@ dist: xenial
 python: 3.5
 virtualenv:
   system_site_packages: true
-
 before_install:
 - sudo apt-get -qq update
-- >
-    sudo apt-get install -y \
-        "rpm=4.12.*" "fakeroot=1.20.2-*" "jq=1.5+*" python-all python3-all python-setuptools python3-setuptools "debhelper=9.*"
-- curl -L "http://download.opensuse.org/repositories/home:/felfert/xUbuntu_16.04/Release.key" | sudo apt-key add
-- echo "deb http://download.opensuse.org/repositories/home:/felfert/xUbuntu_16.04 ./" | sudo tee /etc/apt/sources.list.d/felfert.list ;
+- |
+  sudo apt-get install -y \
+      "rpm=4.12.*" "fakeroot=1.20.2-*" "jq=1.5+*" python-all python3-all python-setuptools python3-setuptools "debhelper=9.*"
+- curl -L "http://download.opensuse.org/repositories/home:/felfert/xUbuntu_16.04/Release.key"
+  | sudo apt-key add
+- echo "deb http://download.opensuse.org/repositories/home:/felfert/xUbuntu_16.04 ./"
+  | sudo tee /etc/apt/sources.list.d/felfert.list ;
 - sudo apt-get update -q
 - sudo apt-get install -y python-rpm-macros
-
 install:
 - pip install -r requirements_setup.txt -r requirements_test.txt
 script:
-# Tag trumps the version; then missing, version from file is taken instead
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
 - python setup.py test build sdist bdist_wheel bdist
 - ls -al dist/
-- python setup.py --command-packages=stdeb.command sdist_dsc --with-python2=True --with-python3=True --no-python2-scripts=True bdist_deb
-- rpmbuild -ba gcg.spec  --define "_topdir ${PWD}/dist" --define "_sourcedir ${PWD}/dist" --define "version ${VERSION}"
+- python setup.py --command-packages=stdeb.command sdist_dsc --with-python2=True --with-python3=True
+  --no-python2-scripts=True bdist_deb
+- rpmbuild -ba gcg.spec  --define "_topdir ${PWD}/dist" --define "_sourcedir ${PWD}/dist"
+  --define "version ${VERSION}"
 - rpm -qlpi --requires --verbose dist/RPMS/*/*.rpm dist/SRPMS/*.rpm
 - for i in deb_dist/*.deb; do dpkg --info "$i" && dpkg -c "$i"; done
-
 before_deploy:
 - ls -al; pwd; find dist deb_dist -ls
-- >
-    if [[ -n "$TRAVIS_TAG" ]] && [[ "${TRAVIS_TAG}" != "$(<version.txt)" ]]; then
-        >&2 echo "ERROR: You have marked a release by applying a Git tag and your version.txt doesn't match it"
-        >&2 echo "Tip: Don't tag if you want to deploy only to test.pypi.org"
-        false
-    fi
-- cp -v pypirc ~/.pypirc && cat ~/.pypirc
-- if [[ $VERSION =~ ^[0-9]+(\.[0-9]+)*$ ]]; then component=main; lifecycle=stable; fi
-
-
+- |
+  if [[ -n "$TRAVIS_TAG" ]] && [[ "${TRAVIS_TAG}" != "$(<version.txt)" ]]; then
+      >&2 echo "ERROR: You have marked a release by applying a Git tag and your version.txt doesn't match it"
+      >&2 echo "Tip: Don't tag if you want to deploy only to test.pypi.org"
+      false
+  fi
 deploy:
-- provider: script
-  skip_cleanup: true
-  script: twine upload -p "${PYPI_PASS}" -r testpypi "dist/gcg-${VERSION}.tar.gz" "dist/gcg-${VERSION}"-*.whl
+  provider: releases
+  api_key:
+    secure: ZVBtmzERC6XMk4qg8oLlI0n/V7T51ttEsyHLBlqvXrUeYKBOF/9ys+ToPz6XUUqUMS6zFt/S6tgJDRw/IQVNAcWbTiuuqWuOrVP+0CSmAfsb+D7OAKqYieSxq60NC0ivmxVPM/sRqtsG0JPqqXTBavJJpOO62jrI16PO8XvUUBeHr1hrP8r+ndtX5tTgA3Zk79qmtwdsal1qZ1QAhsKFN7cS99+A3VpVJOovXaKueXwP2XseOC2rP6VHiUHVKOmQi9riJATlfu8WDrRmPu4463PMVKAm9gFTIvMBlFAbSzHOzOUBycUnu/poVyjYhlFs0n4P17UYcnsjOfOqOmdTN+gK3RIFyZxjpbR3iiO+skebkl/sdp1LzPOcdhwD57i/RYbaiBSPJLxch/v5ZlzauXiFg3IllAo5SBA2v3jsfLsmHkmzdDxnyRbA2kvFxvVj1PbRbx8MZpO7AslkYif+os546Kg87XNjgH2Yl8EpJGrJsCJs3lZetmum+YTZk/kKq7pupeqOWi8Hn5WUUL+9wFLAc5hksPLKDpuoqN0P+2BGewDglFhFVF6jOFtyMj0mGc4sQvDwuBdYEFE98gFeMxHknjKn8vVYfKeuMSZSkKE/Qupx3vsREilIglzoYFcs7BKFCpArMZa6G3dNqQM1FLGjtlk2scO3+xEdDpxjR/4=
+  file: dist/*.rpm deb_dist/*.deb
   on:
-    tags: false
-    all_branches: true
     repo: felfert/git-changelog-generator
-- provider: script
-  skip_cleanup: true
-  script: >
-            bash scripts/bintray/deploy.bash -u "$BINTRAY_USER"
-            -p "$BINTRAY_KEY" -v "$(< version.txt)"
-            -r ${lifecycle:-${DEFAULT_RPM_LIFECYCLE}}
-            -c ${component:-${DEFAULT_DEB_COMPONENT}} -d
-  on:
-    tags: true
-    repo: nokia/git-changelog-generator
-
-env:
-  global:
-  - PYPI_USER=felfert
-  # PYPI_PASS
-  - secure: X5O/DuH2yXtNPieS4dMzgoduIKMymy/HrXj5Ty9y+VkvrgBAs009ilzSP/OIfIaj0u+Rr10UGRs0sKA+jAS2AJ49lb4ZPC4DdjgDryJB3uVOjNTbviKm/7paqQ6+6EeFw0Hn0BqwdFROSTBzcw5+UkCzWbM5SJwm15ULaIrRwxZfWarNiT1zIS77XcmDv9+h/T1GLc+oL3gDKSihN1Iy4aNieZHWRrQGmjbK8d8cDYW6q65qrawD5fVwgMuS1QvK6j3HfUidWA68lWMrOqW4hilcdAdtrjxR3GMjmdMye61k2QcZi/0wEE9D2wkubpacmjbkoGDut2hz1xM4Tq9O+YQxPToZLDWNEsXd5RvVP42Z5vMMH1EPe/rao5igMc7/+6nl0rd1VD11qQvo+WELT6LLmWw+wHoQHC4ibhTPv0o9ZZrxfJTcg4i7tJpYrTfYs9lVlbK9NF6JlUs45FOxQiVIARbQLl0APoby2ue2fdhDLXe9ADgbUpkUgY1ocRtWuCgVxen+1IPInZpgexcX1xCIAgIkx0vPpJalTUtdM/6bhaNH9Zi3q7T0QaHq1POQl4vWD2qTvOw5g3OIugMmRN0m7wjgkaf3XRRrnCdRvVI+7z1CJUxesW6SiDgQAJqQiuxIhOyLLySpOM/b9oANTcY6T9n+0v9KYk7n0Ylg5bE=
-  - DEFAULT_DEB_COMPONENT=dev
-  - DEFAULT_RPM_LIFECYCLE=dev
+    branch: python3
