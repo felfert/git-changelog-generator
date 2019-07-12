@@ -41,7 +41,6 @@ deploy:
   file_glob: true
   file:
     - dist/**/*.rpm
-    - deb_dist/**/*.deb
   on:
     repo: felfert/git-changelog-generator
     branch: python3
