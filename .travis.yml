@@ -37,9 +37,11 @@ before_deploy:
   fi
 deploy:
   provider: releases
-  api_key:
-    secure: ZVBtmzERC6XMk4qg8oLlI0n/V7T51ttEsyHLBlqvXrUeYKBOF/9ys+ToPz6XUUqUMS6zFt/S6tgJDRw/IQVNAcWbTiuuqWuOrVP+0CSmAfsb+D7OAKqYieSxq60NC0ivmxVPM/sRqtsG0JPqqXTBavJJpOO62jrI16PO8XvUUBeHr1hrP8r+ndtX5tTgA3Zk79qmtwdsal1qZ1QAhsKFN7cS99+A3VpVJOovXaKueXwP2XseOC2rP6VHiUHVKOmQi9riJATlfu8WDrRmPu4463PMVKAm9gFTIvMBlFAbSzHOzOUBycUnu/poVyjYhlFs0n4P17UYcnsjOfOqOmdTN+gK3RIFyZxjpbR3iiO+skebkl/sdp1LzPOcdhwD57i/RYbaiBSPJLxch/v5ZlzauXiFg3IllAo5SBA2v3jsfLsmHkmzdDxnyRbA2kvFxvVj1PbRbx8MZpO7AslkYif+os546Kg87XNjgH2Yl8EpJGrJsCJs3lZetmum+YTZk/kKq7pupeqOWi8Hn5WUUL+9wFLAc5hksPLKDpuoqN0P+2BGewDglFhFVF6jOFtyMj0mGc4sQvDwuBdYEFE98gFeMxHknjKn8vVYfKeuMSZSkKE/Qupx3vsREilIglzoYFcs7BKFCpArMZa6G3dNqQM1FLGjtlk2scO3+xEdDpxjR/4=
-  file: dist/*.rpm deb_dist/*.deb
+  api_key: $GH_APIKEY
+  file_glob: true
+  file:
+    - dist/**/*.rpm
+    - deb_dist/**/*.deb
   on:
     repo: felfert/git-changelog-generator
     branch: python3
