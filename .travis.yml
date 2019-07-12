@@ -9,10 +9,9 @@ before_install:
 - sudo apt-get -qq update
 - >
     sudo apt-get install -y \
-        "rpm=4.12.*" "fakeroot=1.20.2-*" "jq=1.5+*" python-all python3-all python-setuptools python3-setuptools "debhelper=9.*" \
-        "apt-transport-https"
-- curl -L "https://download.opensuse.org/repositories/home:/felfert/xUbuntu_16.04/Release.key" | sudo apt-key add
-- echo "deb https://download.opensuse.org/repositories/home:/felfert/xUbuntu_16.04 ./" | sudo tee /etc/apt/sources.list.d/felfert.list ;
+        "rpm=4.12.*" "fakeroot=1.20.2-*" "jq=1.5+*" python-all python3-all python-setuptools python3-setuptools "debhelper=9.*"
+- curl -L "http://download.opensuse.org/repositories/home:/felfert/xUbuntu_16.04/Release.key" | sudo apt-key add
+- echo "deb http://download.opensuse.org/repositories/home:/felfert/xUbuntu_16.04 ./" | sudo tee /etc/apt/sources.list.d/felfert.list ;
 - sudo apt-get update -q
 - sudo apt-get install -y python-rpm-macros
 
