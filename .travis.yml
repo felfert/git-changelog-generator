@@ -40,6 +40,8 @@ deploy:
   api_key: $GH_APIKEY
   file_glob: true
   file:
+    - dist/*.tar.gz
+    - dist/*.whl
     - dist/**/*.rpm
     - deb_dist/**/*.deb
   skip_cleanup: true
