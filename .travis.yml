@@ -13,12 +13,6 @@ before_install:
 - |
   sudo apt-get install -y \
       rpm fakeroot jq python-all python3-all python-setuptools python3-setuptools debhelper
-- curl -L "https://build.opensuse.org/projects/home:felfert/public_key" | sudo apt-key add -
-- apt-key list
-- echo "deb https://download.opensuse.org/repositories/home:/felfert/xUbuntu_18.04 ./"
-  | sudo tee /etc/apt/sources.list.d/felfert.list ;
-- sudo apt-get update -q
-- sudo apt-get install -y python-rpm-macros
 install:
 - pip install -r requirements_setup.txt -r requirements_test.txt
 script:
@@ -30,7 +24,7 @@ script:
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - gcg -O rpm >> gcg.spec
 - mkdir -p rpm_dist
-- rpmbuild -ba gcg.spec  --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist" --define "_buildshell /bin/bash"
+- rpmbuild -bs gcg.spec  --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist" --define "_buildshell /bin/bash"
 - rpm -qlpi --requires --verbose rpm_dist/RPMS/*/*.rpm rpm_dist/SRPMS/*.rpm
 before_deploy:
 - ls -al; pwd; find dist deb_dist -ls
