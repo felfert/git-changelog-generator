@@ -2,6 +2,9 @@ language: python
 sudo: required
 dist: xenial
 python: 3.5
+branches:
+  except:
+    /^untagged/
 virtualenv:
   system_site_packages: true
 before_install:
@@ -37,7 +40,8 @@ before_deploy:
   fi
 deploy:
   provider: releases
-  api_key: $GH_APIKEY
+  api_key:
+    secure: $GH_APIKEY
   file_glob: true
   file:
     - dist/*.tar.gz
