@@ -15,7 +15,7 @@ before_install:
       rpm fakeroot jq python-all python3-all python-setuptools python3-setuptools debhelper
 - curl -L "https://build.opensuse.org/projects/home:felfert/public_key" | sudo apt-key add -
 - apt-key list
-- echo "deb http://download.opensuse.org/repositories/home:/felfert/xUbuntu_18.04 ./"
+- echo "deb https://download.opensuse.org/repositories/home:/felfert/xUbuntu_18.04 ./"
   | sudo tee /etc/apt/sources.list.d/felfert.list ;
 - sudo apt-get update -q
 - sudo apt-get install -y python-rpm-macros
