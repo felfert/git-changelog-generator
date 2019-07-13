@@ -29,7 +29,7 @@ script:
   --no-python2-scripts=True bdist_deb
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - mkdir -p rpm_dist
-- rpmbuild -ba gcg.spec  --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist" --define "_buildshell /bin/bash"
+- rpmbuild -bs gcg.spec  --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist" --define "_buildshell /bin/bash"
 - rpm -qlpi --requires --verbose rpm_dist/RPMS/*/*.rpm rpm_dist/SRPMS/*.rpm
 - for i in deb_dist/*.deb; do dpkg --info "$i" && dpkg -c "$i"; done
 before_deploy:
