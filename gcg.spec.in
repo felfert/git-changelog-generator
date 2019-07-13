@@ -1,6 +1,6 @@
 %global srcname gcg
 %global rel 1%{?dist}
-%if 0%{centos}
+%if 0%{?centos}
 %define python2_sitelib     %(%{__python} -c "from distutils.sysconfig import get_python_lib; import sys; sys.stdout.write(get_python_lib())")
 %endif
 
