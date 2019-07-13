@@ -45,6 +45,7 @@ deploy:
   file:
     - dist/*.tar.gz
     - dist/*.whl
+    - dist/**/*.dsc
     - dist/**/*.rpm
     - deb_dist/**/*.deb
   skip_cleanup: true
