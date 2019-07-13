@@ -32,7 +32,6 @@ script:
 - mkdir -p rpm_dist
 - rpmbuild -bs gcg.spec  --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist" --define "_buildshell /bin/bash"
 - rpm -qlpi --requires --verbose rpm_dist/RPMS/*/*.rpm rpm_dist/SRPMS/*.rpm
-- for i in deb_dist/*.deb; do dpkg --info "$i" && dpkg -c "$i"; done
 before_deploy:
 - ls -al; pwd; find dist deb_dist -ls
 - |
