@@ -27,9 +27,9 @@ script:
 - ls -al dist/
 - python setup.py --command-packages=stdeb.command sdist_dsc --with-python2=True --with-python3=True
   --no-python2-scripts=True bdist_deb
-- sed -e "/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
+- sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - mkdir -p rpm_dist
-- rpmbuild -ba gcg.spec  --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist" --define "_buildshell /bin/bash"
+- rpmbuild -ba gcg.spec  --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist" --define "_buildshell /bin/bash"
 - rpm -qlpi --requires --verbose dist/RPMS/*/*.rpm dist/SRPMS/*.rpm
 - for i in deb_dist/*.deb; do dpkg --info "$i" && dpkg -c "$i"; done
 before_deploy:
