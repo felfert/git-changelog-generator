@@ -50,10 +50,9 @@ deploy:
   file:
     - dist/*.tar.gz
     - dist/*.whl
-    - dist/**/*.dsc
     - dist/**/*.rpm
     - deb_dist/**/*.deb
+    - deb_dist/**/*.dsc
   skip_cleanup: true
   on:
     repo: felfert/git-changelog-generator
-    branch: python3
