@@ -27,6 +27,7 @@ GCG stands for Git Changelog Generator.
 Summary: %{summary}
 %{?python_provide:%python_provide %{name}
 BuildRequires: python2-setuptools
+BuildRequires: python2-pip
 Requires: python2-semver >= 2.0.1
 Requires: python2-jinja2 >= 2.7
 Requires: python2-GitPython >= 1.0.1
@@ -37,7 +38,8 @@ Python 2 version.
 %package -n python3-%{srcname}
 Summary: %{summary}
 %{?python_provide:%python_provide %{name}
-BuildRequires:  python3-setuptools
+BuildRequires: python3-setuptools
+BuildRequires: python3-pip
 Requires: python3-semver >= 2.0.1
 Requires: python3-jinja2 >= 2.7
 Requires: python3-GitPython >= 1.0.1
@@ -49,12 +51,12 @@ Python 3 version.
 %setup -n %{srcname}-%{version}
 
 %build
-%py2_build
-%py3_build
+%py2_build_wheel
+%py3_build_wheel
 
 %install
-%py2_install
-%py3_install
+%py2_install_wheel
+%py3_install_wheel
 
 %files -n python2-%{srcname}
 %license LICENSE
