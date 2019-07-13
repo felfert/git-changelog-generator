@@ -25,9 +25,10 @@ script:
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
 - python setup.py test build sdist bdist_wheel bdist
 - ls -al dist/
-- python setup.py --command-packages=stdeb.command sdist_dsc --with-python2=True --with-python3=True
-  --no-python2-scripts=True bdist_deb
+- pip install dist/gcg-*.whl
+- python setup.py --command-packages=stdeb.command sdist_dsc
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
+- gcg -O rpm >> gcg.spec
 - mkdir -p rpm_dist
 - rpmbuild -bs gcg.spec  --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist" --define "_buildshell /bin/bash"
 - rpm -qlpi --requires --verbose rpm_dist/RPMS/*/*.rpm rpm_dist/SRPMS/*.rpm
