@@ -1,0 +1,71 @@
+%global srcname gcg
+%global rel 1%{?dist}
+%if 0%{centos}
+%define python2_sitelib     %(%{__python} -c "from distutils.sysconfig import get_python_lib; import sys; sys.stdout.write(get_python_lib())")
+%endif
+
+Name: %{srcname}
+Version: _VERSION_
+Release: %{rel}
+Summary: Git Changelog Generator
+
+License: BSD-3-Clause
+Url: https://github.com/nokia/git-changelog-generator
+Source0: https://https://github.com/felfert/git-changelog-generator/releases/download/%{version}/%{name}-%{version}.tar.gz
+
+BuildRoot: %{_tmppath}/%{_name}-%{version}-%{release}-buildroot
+
+BuildArch: noarch
+
+%global _description \
+GCG stands for Git Changelog Generator.
+
+
+%description %{_description}
+
+%package -n python2-%{srcname}
+Summary: %{summary}
+%{?python_provide:%python_provide %{name}
+BuildRequires: python2-setuptools
+Requires: python2-semver >= 2.0.1
+Requires: python2-jinja2 >= 2.7
+Requires: python2-GitPython >= 1.0.1
+%description -n python2-%{srcname} %{_description}
+
+Python 2 version.
+
+%package -n python3-%{srcname}
+Summary: %{summary}
+%{?python_provide:%python_provide %{name}
+BuildRequires:  python3-setuptools
+Requires: python3-semver >= 2.0.1
+Requires: python3-jinja2 >= 2.7
+Requires: python3-GitPython >= 1.0.1
+%description -n python3-%{srcname} %{_description}
+
+Python 3 version.
+
+%prep
+%setup -n %{srcname}-%{version}
+
+%build
+%py2_build
+%py3_build
+
+%install
+%py2_install
+%py3_install
+
+%files -n python2-%{srcname}
+%license LICENSE
+%doc README.rst
+%{python2_sitelib}/%{srcname}-*.egg-info/
+%{python2_sitelib}/%{srcname}/
+
+%files -n python3-%{srcname}
+%license LICENSE
+%doc README.rst
+%{python3_sitelib}/%{srcname}-*.egg-info/
+%{python3_sitelib}/%{srcname}/
+
+%changelog
