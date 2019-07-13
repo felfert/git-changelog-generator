@@ -4,7 +4,8 @@ dist: xenial
 python: 3.5
 branches:
   except:
-    /^untagged/
+    - /^untagged/
+    - /\.dev$/
 virtualenv:
   system_site_packages: true
 before_install:
@@ -38,6 +39,10 @@ before_deploy:
       >&2 echo "Tip: Don't tag if you want to deploy only to test.pypi.org"
       false
   fi
+before_deploy:
+  - git config --local user.name "$GH_USER"
+  - git config --local user.email "$GH_MAIL"
+  - git tag $VERSION
 deploy:
   provider: releases
   api_key: $GH_APIKEY
