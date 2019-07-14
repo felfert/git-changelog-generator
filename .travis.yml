@@ -11,7 +11,7 @@ virtualenv:
 before_install:
 - sudo apt-get -qq update
 - |
-  sudo apt-get install -y \
+  sudo apt-get -qq install -y \
       rpm fakeroot jq python-all python3-all python-setuptools python3-setuptools debhelper
 install:
 - pip install -r requirements_setup.txt -r requirements_test.txt
@@ -22,7 +22,7 @@ script:
 - pip install dist/gcg-*.whl
 - mkdir -p deb_dist
 - tar tvzf dist/gcg-${VERSION}.tar.gz
-- tar -xz --transform "s|^gcg-.*/|gcg-${VERSION}/|" -C deb_dist -f dist/gcg-${VERSION}.tar.gz
+- tar -xzCf deb_dist dist/gcg-${VERSION}.tar.gz
 - gcg -O deb -n gcg -D unstable -c "${VERSION}" -o deb_dist/gcg-${VERSION}/debian/changelog
 - sed -e  's/^$/./' -e 's/^/ /' LICENSE >> deb_dist/gcg-${VERSION}/debian/copyright
 - find deb_dist -ls
