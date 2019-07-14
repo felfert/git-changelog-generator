@@ -23,7 +23,7 @@ script:
 - ls -al dist/
 - pip install dist/gcg-*.whl
 - mkdir -p deb_dist
-- tar -xz --transform "s|^gcg-.*/|gcg-${VERSION}/|" -C x -f dist/gcg-${VERSION}.tar.gz
+- tar -xz --transform "s|^gcg-.*/|gcg-${VERSION}/|" -C deb_dist -f dist/gcg-${VERSION}.tar.gz
 - gcg -O deb -n gcg -D unstable -c "${VERSION}" -o deb_dist/gcg-${VERSION}/debian/changelog
 - sed -e  's/^$/./' -e 's/^/ /' LICENSE >> deb_dist/gcg-${VERSION}/debian/copyright
 - pushd deb_dist/gcg-${VERSION} && dpkg-source -b . ; popd
