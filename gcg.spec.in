@@ -55,6 +55,8 @@ Python 2 version.
 Summary: %{summary}
 %{?python_provide:%python_provide python3-%{srcname}}
 BuildRequires: python3-setuptools
+Requires(post): %{_sbindir}/update-alternatives
+Requires(postun): %{_sbindir}/update-alternatives
 Requires: python3-semver >= 2.0.1
 Requires: python3-jinja2 >= 2.7
 Requires: python3-GitPython >= 1.0.1
@@ -99,27 +101,40 @@ grep -q %{__python2} %{buildroot}%{_bindir}/gcg-2
 grep -q %{__python3} %{buildroot}%{_bindir}/gcg-3
 %endif
 
-%files
-%license LICENSE
-%doc README.rst
-%{_bindir}/gcg
-
 %if %{with python2}
 %files -n python2-%{srcname}
+%ghost %{_bindir}/gcg
 %license LICENSE
 %doc README.rst
 %{python2_sitelib}/%{srcname}-*.egg-info/
 %{python2_sitelib}/%{srcname}/
 %{_bindir}/gcg-2
+
+%post -n python2-%{srcname}
+%{_sbindir}/update-alternatives --install %{_bindir}/gcg gcg %{_bindir}/gcg-2 90
+
+%postun -n python2-%{srcname}
+if [ $1 -eq 0 ]; then
+    %{_sbindir}/update-alternatives --remove gcg %{_bindir}/gcg-2
+fi
 %endif
 
 %if %{with python3}
 %files -n python3-%{srcname}
+%ghost %{_bindir}/gcg
 %license LICENSE
 %doc README.rst
 %{python3_sitelib}/%{srcname}-*.egg-info/
 %{python3_sitelib}/%{srcname}/
 %{_bindir}/gcg-3
+
+%post -n python3-%{srcname}
+%{_sbindir}/update-alternatives --install %{_bindir}/gcg gcg %{_bindir}/gcg-3 90
+
+%postun -n python3-%{srcname}
+if [ $1 = 0 ]; then
+    %{_sbindir}/update-alternatives --remove gcg %{_bindir}/gcg-3
+fi
 %endif
 
 %changelog

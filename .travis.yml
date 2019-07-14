@@ -33,7 +33,10 @@ script:
 - rpmbuild -ba gcg.spec --nodeps --with python3 --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist"
 - rpm -qlpi --requires --verbose rpm_dist/RPMS/*/*.rpm rpm_dist/SRPMS/*.rpm
 before_deploy:
-- ls -al; pwd; find dist deb_dist -ls
+- ls -al ; pwd
+- find dist -ls
+- find deb_dist -ls
+- find rpm_dist -ls
 - |
   if [[ -n "$TRAVIS_TAG" ]] && [[ "${TRAVIS_TAG}" != "$(<version.txt)" ]]; then
       >&2 echo "ERROR: You have marked a release by applying a Git tag and your version.txt doesn't match it"
