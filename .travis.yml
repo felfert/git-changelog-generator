@@ -54,9 +54,9 @@ deploy:
     - dist/gcg-${VERSION}.tar.gz
     - dist/*.whl
     - rpm_dist/**/*.rpm
-    - deb_dist/**/*.deb
-    - deb_dist/**/*.dsc
-    - deb_dist/**/*.tar.*
+    - deb_dist/*.deb
+    - deb_dist/*.dsc
+    - deb_dist/*.tar.*
   skip_cleanup: true
   on:
     repo: felfert/git-changelog-generator
