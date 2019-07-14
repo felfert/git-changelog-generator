@@ -25,6 +25,22 @@ script:
 - python setup.py --command-packages=stdeb.command sdist_dsc
 - gcg -O deb -n gcg -D unstable -c "${VERSION}" -o deb_dist/gcg-${DVERSION}/debian/changelog
 - echo "3.0 (native)" > deb_dist/gcg-${DVERSION}/debian/source/format
+- |
+  pushd deb_dist/gcg-${DVERSION} && patch -p0 << EOF
+  --- debian/rules.orig   2019-07-14 16:22:51.967852808 +0000
+  +++ debian/rules        2019-07-14 16:24:39.853330320 +0000
+  @@ -22,7 +22,9 @@
+  
+   override_dh_auto_install:
+          python setup.py install --force --root=debian/python-gcg --no-compile -O0 --install-layout=deb --prefix=/usr
+  +       mv debian/python-gcg/usr/bin/gcg debian/python-gcg/usr/bin/gcg-2
+          python3 setup.py install --force --root=debian/python3-gcg --no-compile -O0 --install-layout=deb --prefix=/usr
+  +       mv debian/python3-gcg/usr/bin/gcg debian/python3-gcg/usr/bin/gcg-3
+  
+  
+  
+  EOF
+  popd
 - rm -f deb_dist/*.dsc deb_dist/*.tar.* deb_dist/*.buildinfo deb_dist/*.changes
 - pushd deb_dist/gcg-${DVERSION} && dpkg-source -b . ; popd
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
