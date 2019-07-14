@@ -16,11 +16,11 @@
 }
 
 %py2_install() %{expand:\\\
-  python2 setup.py install --force --root=%{buildroot} --no-compile -O0 --install-scripts=/trash --install-lib %{python2_sitelib}
+  python2 setup.py install --force --root=%{buildroot} --no-compile -O0 --install-lib %{python2_sitelib}
   sleep 1
 }
 
 %py3_install() %{expand:\\\
-  python3 setup.py install --force --root=%{buildroot} --no-compile -O0 --install-scripts=/trash --install-lib %{python3_sitelib}
+  python3 setup.py install --force --root=%{buildroot} --no-compile -O0 --install-lib %{python3_sitelib}
   sleep 1
 }
