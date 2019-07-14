@@ -18,7 +18,7 @@ install:
 - pip3 install -r requirements_setup.txt -r requirements_test.txt
 script:
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
-- export DVERSION=$(echo ${VERSION} | sed -e 's/\.dev/~dev/')}
+- export DVERSION=$(echo ${VERSION} | sed -e 's/\.dev/~dev/')
 - python setup.py test build sdist bdist_wheel bdist
 - ls -al dist/
 - pip install dist/gcg-*.whl
