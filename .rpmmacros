@@ -6,21 +6,21 @@
 %python3_sitelib    /usr/lib/python3.7/site-packages
 
 %py2_build() %{expand:\\\
-  python2 setup.py build --force
+  %{__python2} setup.py build --force
   sleep 1
 }
 
 %py3_build() %{expand:\\\
-  python3 setup.py build --force
+  %{__python3} setup.py build --force
   sleep 1
 }
 
 %py2_install() %{expand:\\\
-  python2 setup.py install --force --root=%{buildroot} --no-compile -O0 --install-scripts=%{_bindir} --install-lib %{python2_sitelib}
+  %{__python2} setup.py install --force --root=%{buildroot} --no-compile -O0 --install-scripts=%{_bindir} --install-lib %{python2_sitelib}
   sleep 1
 }
 
 %py3_install() %{expand:\\\
-  python3 setup.py install --force --root=%{buildroot} --no-compile -O0 --install-scripts=%{_bindir} --install-lib %{python3_sitelib}
+  %{__python3} setup.py install --force --root=%{buildroot} --no-compile -O0 --install-scripts=%{_bindir} --install-lib %{python3_sitelib}
   sleep 1
 }
