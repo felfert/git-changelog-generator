@@ -24,8 +24,8 @@ script:
 - tar -xz --transform "s|^gcg-.*/|gcg-${VERSION}/|" -C deb_dist -f dist/gcg-${VERSION}.tar.gz
 - gcg -O deb -n gcg -D unstable -c "${VERSION}" -o deb_dist/gcg-${VERSION}/debian/changelog
 - sed -e  's/^$/./' -e 's/^/ /' LICENSE >> deb_dist/gcg-${VERSION}/debian/copyright
-- pushd deb_dist/gcg-${VERSION} && dpkg-source -b . ; popd
-- pushd deb_dist/gcg-${VERSION} && dpkg-buildpackage -A --no-sign ; popd
+- pushd deb_dist/gcg-${VERSION} && dpkg-source -b . && popd
+- pushd deb_dist/gcg-${VERSION} && dpkg-buildpackage -A --no-sign && popd
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - gcg -O rpm >> gcg.spec
 - cp .rpmmacros ~/
