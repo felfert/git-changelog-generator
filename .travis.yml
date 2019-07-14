@@ -23,16 +23,15 @@ script:
 - ls -al dist/
 - pip install dist/gcg-*.whl
 - python setup.py --command-packages=stdeb.command sdist_dsc
-- find deb_dist -ls
 - gcg -O deb -n gcg -D unstable -c "${VERSION}" -o deb_dist/gcg-${DVERSION}/debian/changelog
-- rm -f deb_dist/*.dsc deb_dist/*.debian.tar.*
+- rm -f deb_dist/*.dsc deb_dist/*.debian.tar.* deb_dist/*.buildinfo deb_dist/*.changes
 - mv deb_dist/gcg_${DVERSION}.orig.tar.gz deb_dist/gcg_${VERSION}.orig.tar.gz
 - pushd deb_dist/gcg-${DVERSION} && dpkg-source -b . ; popd
 - find deb_dist -ls
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - gcg -O rpm >> gcg.spec
 - cp .rpmmacros ~/
-- rpmbuild -bs gcg.spec --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist"
+- rpmbuild -ba gcg.spec --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist"
 - rpm -qlpi --requires --verbose rpm_dist/RPMS/*/*.rpm rpm_dist/SRPMS/*.rpm
 before_deploy:
 - ls -al; pwd; find dist deb_dist -ls
