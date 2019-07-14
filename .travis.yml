@@ -19,8 +19,6 @@ install:
 script:
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
 - python setup.py test sdist bdist_wheel
-- python3 setup.py bdist_wheel
-- ls -al dist/
 - pip install dist/gcg-*.whl
 - mkdir -p deb_dist
 - tar -xz --transform "s|^gcg-.*/|gcg-${VERSION}/|" -C deb_dist -f dist/gcg-${VERSION}.tar.gz
