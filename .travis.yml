@@ -24,7 +24,7 @@ script:
 - pip install dist/gcg-*.whl
 - python setup.py --command-packages=stdeb.command sdist_dsc
 - gcg -O deb -n gcg -D unstable -c "${VERSION}" -o deb_dist/gcg-${DVERSION}/debian/changelog
-- echo "3.0 (native)" > deb_dist/gcg-${DVERSION}/debian/native/format
+- echo "3.0 (native)" > deb_dist/gcg-${DVERSION}/debian/source/format
 - rm -f deb_dist/*.dsc deb_dist/*.tar.* deb_dist/*.buildinfo deb_dist/*.changes
 - pushd deb_dist/gcg-${DVERSION} && dpkg-source -b . ; popd
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
