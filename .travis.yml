@@ -5,7 +5,7 @@ python: 3.6
 branches:
   except:
     - /^untagged/
-    - /\.dev$/
+    - /\.dev[0-9]+$/
 virtualenv:
   system_site_packages: true
 before_install:
@@ -15,6 +15,7 @@ before_install:
       rpm fakeroot jq python-all python3-all python-setuptools python3-setuptools debhelper
 install:
 - pip install -r requirements_setup.txt -r requirements_test.txt
+- pip3 install -r requirements_setup.txt -r requirements_test.txt
 script:
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
 - python setup.py test build sdist bdist_wheel bdist
