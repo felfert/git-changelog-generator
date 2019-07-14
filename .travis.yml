@@ -22,7 +22,7 @@ script:
 - pip install dist/gcg-*.whl
 - mkdir -p deb_dist
 - tar tvzf dist/gcg-${VERSION}.tar.gz
-- tar -xzCf deb_dist dist/gcg-${VERSION}.tar.gz
+- tar xzCf deb_dist dist/gcg-${VERSION}.tar.gz
 - gcg -O deb -n gcg -D unstable -c "${VERSION}" -o deb_dist/gcg-${VERSION}/debian/changelog
 - sed -e  's/^$/./' -e 's/^/ /' LICENSE >> deb_dist/gcg-${VERSION}/debian/copyright
 - find deb_dist -ls
