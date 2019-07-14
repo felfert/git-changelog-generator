@@ -18,13 +18,16 @@ install:
 - pip3 install -r requirements_setup.txt -r requirements_test.txt
 script:
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
+- export DVERSION=$(echo ${VERSION} | sed -e 's/\.dev/~dev/')}
 - python setup.py test build sdist bdist_wheel bdist
 - ls -al dist/
 - pip install dist/gcg-*.whl
 - python setup.py --command-packages=stdeb.command sdist_dsc
-- echo "======================================================="
 - find deb_dist -ls
-- echo "======================================================="
+- gcg -O deb -n gcg -D unstable -c "${VERSION}" -o deb_dist/gcg-${DVERSION}/debian/changelog
+- rm -f deb_dist/*.dsc deb_dist/*-debian.tar.*
+- cd deb_dist/gcg-${DVERSION} && dpkg-source -b .
+- find deb_dist -ls
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - gcg -O rpm >> gcg.spec
 - cp .rpmmacros ~/
