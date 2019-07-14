@@ -27,7 +27,6 @@ script:
 - rm -f deb_dist/*.dsc deb_dist/*.debian.tar.* deb_dist/*.buildinfo deb_dist/*.changes
 - mv deb_dist/gcg_${DVERSION}.orig.tar.gz deb_dist/gcg_${VERSION}.orig.tar.gz
 - pushd deb_dist/gcg-${DVERSION} && dpkg-source -b . ; popd
-- find deb_dist -ls
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - gcg -O rpm >> gcg.spec
 - cp .rpmmacros ~/
