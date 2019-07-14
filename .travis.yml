@@ -2,6 +2,8 @@ language: python
 sudo: required
 dist: bionic
 python: 3.6
+git:
+  depth: false
 branches:
   except:
     - /^untagged/
@@ -9,9 +11,11 @@ branches:
 virtualenv:
   system_site_packages: true
 before_install:
+- git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+- git fetch --unshallow --tags
 - sudo apt-get -qq update
 - |
-  sudo apt-get -qq install -y \
+  sudo apt-get install -y \
       rpm fakeroot jq python-all python3-all python-setuptools python3-setuptools debhelper
 install:
 - pip install -r requirements_setup.txt -r requirements_test.txt
