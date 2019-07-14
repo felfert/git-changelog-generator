@@ -22,6 +22,9 @@ script:
 - ls -al dist/
 - pip install dist/gcg-*.whl
 - python setup.py --command-packages=stdeb.command sdist_dsc
+- echo "======================================================="
+- find deb_dist -ls
+- echo "======================================================="
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - gcg -O rpm >> gcg.spec
 - cp .rpmmacros ~/
@@ -44,7 +47,7 @@ deploy:
   api_key: $GH_APIKEY
   file_glob: true
   file:
-    - dist/*.tar.gz
+    - dist/gcg-${VERSION}.tar.gz
     - dist/*.whl
     - rpm_dist/**/*.rpm
     - deb_dist/**/*.deb
