@@ -1,5 +1,18 @@
 %global srcname gcg
 %global rel 1%{?dist}
+
+%if 0%{?fedora}
+%bcond_without python3
+%else
+%bcond_with python3
+%endif
+
+%if 0%{?fedora} && 0%{?fedora} >= 30
+%bcond_with python2
+%else
+%bcond_without python2
+%endif
+
 %if 0%{?centos}
 %define python2_sitelib     %(%{__python} -c "from distutils.sysconfig import get_python_lib; import sys; sys.stdout.write(get_python_lib())")
 %endif
@@ -23,6 +36,7 @@ GCG stands for Git Changelog Generator.
 
 %description %{_description}
 
+%if %{with python2}
 %package -n python2-%{srcname}
 Summary: %{summary}
 %{?python_provide:%python_provide python2-%{srcname}}
@@ -34,6 +48,9 @@ Requires: python2-GitPython >= 1.0.1
 
 Python 2 version.
 
+%endif
+
+%if %{with python3}
 %package -n python3-%{srcname}
 Summary: %{summary}
 %{?python_provide:%python_provide python3-%{srcname}}
@@ -45,27 +62,68 @@ Requires: python3-GitPython >= 1.0.1
 
 Python 3 version.
 
+%endif
+
 %prep
-%setup -n %{srcname}-%{version}
+%autosetup -n %{srcname}-%{version} -p1
 
 %build
+%if %{with python2}
 %py2_build
+%endif
+%if %{with python3}
 %py3_build
+%endif
 
 %install
+%if %{with python2}
 %py2_install
+mv %{buildroot}%{_bindir}/gcg{,-2}
+%endif
+%if %{with python3}
 %py3_install
+mv %{buildroot}%{_bindir}/gcg{,-3}
+%endif
+%if 0%{?fedora} >= 26 || ! %{with python2}
+ln -s %{_bindir}/gcg-3 %{buildroot}%{_bindir}/gcg
+%else
+ln -s %{_bindir}/gcg-2 %{buildroot}%{_bindir}/gcg
+%endif
 
+%check
+%if %{with python2}
+(cd build/lib && python2 ../../setup.py test)
+%endif
+%if %{with python3}
+python3 setup.py test
+%endif
+# Make sure the scripts use the expected python versions
+%if %{with python2}
+grep -q %{__python2} %{buildroot}%{_bindir}/gcg-2
+%endif
+%if %{with python3}
+grep -q %{__python3} %{buildroot}%{_bindir}/gcg-3
+%endif
+
+%files
+%license LICENSE
+%doc README.rst
+%{_bindir}/gcg
+
+%if %{with python2}
 %files -n python2-%{srcname}
 %license LICENSE
 %doc README.rst
 %{python2_sitelib}/%{srcname}-*.egg-info/
 %{python2_sitelib}/%{srcname}/
+%endif
 
+%if %{with python3}
 %files -n python3-%{srcname}
 %license LICENSE
 %doc README.rst
 %{python3_sitelib}/%{srcname}-*.egg-info/
 %{python3_sitelib}/%{srcname}/
+%endif
 
 %changelog

@@ -23,8 +23,8 @@ script:
 - python setup.py --command-packages=stdeb.command sdist_dsc
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - gcg -O rpm >> gcg.spec
-- mkdir -p rpm_dist
-- rpmbuild -bs gcg.spec  --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist" --define "_buildshell /bin/bash"
+- cp .rpmmacros ~/
+- rpmbuild -bs gcg.spec --nodeps --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist"
 - rpm -qlpi --requires --verbose rpm_dist/RPMS/*/*.rpm rpm_dist/SRPMS/*.rpm
 before_deploy:
 - ls -al; pwd; find dist deb_dist -ls
