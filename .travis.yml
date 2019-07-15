@@ -22,12 +22,13 @@ install:
 - pip3 install -r requirements_setup.txt -r requirements_test.txt
 script:
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
-- python setup.py test sdist bdist_wheel
+- python setup.py test bdist_wheel
 - pip install dist/gcg-*.whl
+- gcg -O deb -n gcg -D unstable -c "${VERSION}" -o debian/changelog
+- sed -e  's/^$/./' -e 's/^/ /' LICENSE >> debian/copyright
+- python setup.py sdist
 - mkdir -p deb_dist
 - tar xzCf deb_dist dist/gcg-${VERSION}.tar.gz
-- gcg -O deb -n gcg -D unstable -c "${VERSION}" -o deb_dist/gcg-${VERSION}/debian/changelog
-- sed -e  's/^$/./' -e 's/^/ /' LICENSE >> deb_dist/gcg-${VERSION}/debian/copyright
 - pushd deb_dist/gcg-${VERSION} && dpkg-source -b . && popd
 - pushd deb_dist/gcg-${VERSION} && dpkg-buildpackage -A --no-sign && popd
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
