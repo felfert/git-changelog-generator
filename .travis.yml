@@ -65,4 +65,3 @@ deploy:
   skip_cleanup: true
   on:
     repo: felfert/git-changelog-generator
-    branch: python3
