@@ -17,10 +17,10 @@ before_install:
 - |
   sudo apt-get install -y \
       rpm fakeroot jq python-all python3-all python-setuptools python3-setuptools debhelper \
-      python-pytest-runner python3-pytest-runner
+      python-git python-semver python-jinja2 python3-git python3-semver python3-jinja2
 install:
-- pip install -r requirements_setup.txt -r requirements_test.txt
-- pip3 install -r requirements_setup.txt -r requirements_test.txt
+- pip install -r requirements_test.txt
+- pip3 install -r requirements_test.txt
 script:
 - export VERSION=${TRAVIS_TAG:-$(<version.txt).dev${TRAVIS_BUILD_NUMBER}}
 - python setup.py test bdist_wheel
