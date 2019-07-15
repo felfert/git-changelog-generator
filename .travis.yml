@@ -16,7 +16,8 @@ before_install:
 - sudo apt-get -qq update
 - |
   sudo apt-get install -y \
-      rpm fakeroot jq python-all python3-all python-setuptools python3-setuptools debhelper
+      rpm fakeroot jq python-all python3-all python-setuptools python3-setuptools debhelper \
+      python-pytest-runner python3-pytest-runner
 install:
 - pip install -r requirements_setup.txt -r requirements_test.txt
 - pip3 install -r requirements_setup.txt -r requirements_test.txt
