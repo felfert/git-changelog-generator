@@ -25,6 +25,9 @@ Summary: Git Changelog Generator
 License: BSD-3-Clause
 Url: https://github.com/nokia/git-changelog-generator
 Source0: https://https://github.com/felfert/git-changelog-generator/releases/download/%{version}/%{name}-%{version}.tar.gz
+%if 0%{?centos}
+BuildRequires: epel-release
+%endif
 
 BuildRoot: %{_tmppath}/%{_name}-%{version}-%{release}-buildroot
 
@@ -40,7 +43,8 @@ GCG stands for Git Changelog Generator.
 %package -n python2-%{srcname}
 Summary: %{summary}
 %{?python_provide:%python_provide python2-%{srcname}}
-BuildRequires: python2-setuptools, python2-rpm-macros
+BuildRequires: python2-setuptools
+BuildRequires: python2-rpm-macros python-rpm-macros
 Requires: python2-semver >= 2.0.1
 Requires: python2-jinja2 >= 2.8
 Requires: python2-GitPython >= 1.0.1
@@ -54,7 +58,8 @@ Python 2 version.
 %package -n python3-%{srcname}
 Summary: %{summary}
 %{?python_provide:%python_provide python3-%{srcname}}
-BuildRequires: python3-setuptools python3-rpm-macros
+BuildRequires: python3-setuptools
+BuildRequires: python3-rpm-macros python-rpm-macros
 Requires(post): %{_sbindir}/update-alternatives
 Requires(postun): %{_sbindir}/update-alternatives
 Requires: python3-semver >= 2.0.1
