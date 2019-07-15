@@ -25,9 +25,6 @@ Summary: Git Changelog Generator
 License: BSD-3-Clause
 Url: https://github.com/nokia/git-changelog-generator
 Source0: https://https://github.com/felfert/git-changelog-generator/releases/download/%{version}/%{name}-%{version}.tar.gz
-%if 0%{?centos}
-BuildRequires: epel-release
-%endif
 
 BuildRoot: %{_tmppath}/%{_name}-%{version}-%{release}-buildroot
 
@@ -44,7 +41,12 @@ GCG stands for Git Changelog Generator.
 Summary: %{summary}
 %{?python_provide:%python_provide python2-%{srcname}}
 BuildRequires: python2-setuptools
+BuildRequires: python2-semver >= 2.0.1
+BuildRequires: python2-jinja2 >= 2.8
+BuildRequires: python2-GitPython >= 1.0.1
+%if ! 0%{?centos}
 BuildRequires: python2-rpm-macros python-rpm-macros
+%endif
 Requires: python2-semver >= 2.0.1
 Requires: python2-jinja2 >= 2.8
 Requires: python2-GitPython >= 1.0.1
@@ -59,6 +61,9 @@ Python 2 version.
 Summary: %{summary}
 %{?python_provide:%python_provide python3-%{srcname}}
 BuildRequires: python3-setuptools
+BuildRequires: python3-semver >= 2.0.1
+BuildRequires: python3-jinja2 >= 2.8
+BuildRequires: python3-GitPython >= 1.0.1
 BuildRequires: python3-rpm-macros python-rpm-macros
 Requires(post): %{_sbindir}/update-alternatives
 Requires(postun): %{_sbindir}/update-alternatives
@@ -76,7 +81,11 @@ Python 3 version.
 
 %build
 %if %{with python2}
+%if 0%{?centos}
+python2 setup.py build --executable="/usr/bin/python2 -s"
+%else
 %py2_build
+%endif
 %endif
 %if %{with python3}
 %py3_build
@@ -84,7 +93,11 @@ Python 3 version.
 
 %install
 %if %{with python2}
+%if 0%{?centos}
+python2 setup.py install -O1 --skip-build --root %{buildroot}
+%else
 %py2_install
+%endif
 mv %{buildroot}%{_bindir}/gcg{,-2}
 %endif
 %if %{with python3}
@@ -100,7 +113,11 @@ ln -s %{_bindir}/gcg-2 %{buildroot}%{_bindir}/gcg
 %check
 # Make sure the scripts use the expected python versions
 %if %{with python2}
+%if 0%{?centos}
+grep -q /usr/bin/python2 %{buildroot}%{_bindir}/gcg-2
+%else
 grep -q %{__python2} %{buildroot}%{_bindir}/gcg-2
+%endif
 %endif
 %if %{with python3}
 grep -q %{__python3} %{buildroot}%{_bindir}/gcg-3
