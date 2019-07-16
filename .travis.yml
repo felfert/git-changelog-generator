@@ -31,12 +31,16 @@ script:
 - mkdir -p deb_dist
 - tar xzCf deb_dist dist/gcg-${VERSION}.tar.gz
 - pushd deb_dist/gcg-${VERSION} && dpkg-source -b . && popd
-- test "${BUILD_BIN_PKGS}" = "no" || pushd deb_dist/gcg-${VERSION} && dpkg-buildpackage -A --no-sign && popd
+- |
+  if test "${BUILD_BIN_PKGS}" = "yes" ; then
+    pushd deb_dist/gcg-${VERSION} && dpkg-buildpackage -A --no-sign && popd
+  fi
 - sed -e "s/_VERSION_/${VERSION}/g" < gcg.spec.in > gcg.spec
 - gcg -O rpm >> gcg.spec
 - cp .rpmmacros ~/
 - rpmbuild -bs gcg.spec --nodeps --with python3 --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist"
-- test "${BUILD_BIN_PKGS}" = "no" || rpmbuild -bb gcg.spec --nodeps --with python3 --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist"
+- test "${BUILD_BIN_PKGS}" = "yes" && bt=b || bt=s
+- rpmbuild -b${bt} gcg.spec --nodeps --with python3 --define "_topdir ${PWD}/rpm_dist" --define "_sourcedir ${PWD}/dist"
 - rpm -qlpi --requires --verbose rpm_dist/RPMS/*/*.rpm rpm_dist/SRPMS/*.rpm
 before_deploy:
 - ls -al ; pwd
