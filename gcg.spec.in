@@ -65,7 +65,7 @@ BuildRequires: python3-setuptools
 BuildRequires: python3-semver >= 2.0.1
 BuildRequires: python3-jinja2 >= 2.8
 %if 0%{?mageia}
-BuildRequires: python2-gitpython >= 1.0.1
+BuildRequires: python3-gitpython >= 1.0.1
 %else
 BuildRequires: python3-GitPython >= 1.0.1
 %endif
