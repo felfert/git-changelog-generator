@@ -19,6 +19,7 @@ Release: %{rel}
 Summary: Git Changelog Generator
 %if 0%{?suse_version}
 Group:   Development/Tools/Other
+%endif
 
 License: BSD-3-Clause
 Url: https://github.com/nokia/git-changelog-generator
