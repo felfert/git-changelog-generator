@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Definition of exit codes for the main()
 """

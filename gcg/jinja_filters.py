@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Collection of filter functions which can be used in Jinja2 templates
 """
