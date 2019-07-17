@@ -24,11 +24,11 @@ from datetime import datetime
 import git
 import jinja2
 import jinja2.environment
+from tzlocal import get_localzone
 
 import gcg.errors as err
 from gcg.tag_filter import TagFilter
 from gcg.jinja_filters import commit_headline
-from tzlocal import get_localzone
 
 
 def parse_args(argv):
