@@ -20,7 +20,6 @@ import os
 import re
 import sys
 from datetime import datetime
-from tzlocal import get_localzone
 
 import git
 import jinja2
@@ -29,6 +28,7 @@ import jinja2.environment
 import gcg.errors as err
 from gcg.tag_filter import TagFilter
 from gcg.jinja_filters import commit_headline
+from tzlocal import get_localzone
 
 
 def parse_args(argv):
