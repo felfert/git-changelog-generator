@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 # encoding: utf-8
 
 '''
@@ -53,6 +53,7 @@ def prepare_git_repo(root, dirname='testrepo', messages=None,
     client = git.Git(path)
     writer = repo.config_writer(config_level='repository')
     writer.add_section('user')
+    # pylint: disable=no-member
     writer.set('user', 'name', AUTHOR.name)
     writer.set('user', 'email', AUTHOR.email)
     writer.release()

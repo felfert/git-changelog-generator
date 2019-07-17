@@ -1,5 +1,6 @@
 .idea/
 *.pyc
+*.spec
 build/
 dist/
 venv/
@@ -8,6 +9,7 @@ cover/
 *.egg-info/
 .coverage
 deb_dist/
+rpm_dist/
 *.tar.gz
 *.tgz
 .pytest_cache/
